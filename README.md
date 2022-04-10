@@ -186,6 +186,55 @@ terraform apply -auto-approve
 ```
 This will take some time (up to 10min) and after this command executes, you'll see a big QR code in the terminal window that you can use to set up the first device (Ex: your phone) that will be using Wireguard + PiHole. You can close your Terminal window.
 
+## Installing the Client Configuration
+
+In the last section, we managed to install and setup our VPN server. Now we need to configure our clients (Ex: your PC or phone) to connect to the VPN server.
+**Note**:
+<small>By default, the VPN server will create configuration files for two clients (let's refer to them as Peer 1 and Peer 2). This can be changed by editing [this line](https://github.com/VFPAP/deployWPU/blob/6b38c9cc2a6db8b809207daafeb127208e05509a/setupWireHole/docker-compose.yml#L34) in the Docker Compose configuration file.<small>
+
+To access the configuration files for all the Peers, we need to access the server through SSH. To do that, we need to use the Private Key we created in [this step](#generating-a-ssh-key-pair-the-linux-way). If you didn't change anything, your Private Key should be in `~/.ssh/id_rsa`.
+Also, you need the IP address of your server. You can find the IP address by going to cloud.oracle.com/compute/instances?region=\<location\> (Ex: https://cloud.oracle.com/compute/instances?region=uk-london-1). You should then see an instance called "pihole-wireguard". If you don't see it, you may need to select a compartment under "List Scope" on the left-hand side of the page.
+Once you find the “pihole-wireguard” instance, its IP address is shown under "Public IP".
+Now you can SSH into the server by running the following command in a Terminal:
+```console
+ssh -i ~/.ssh/id_rsa ubuntu@<PublicIP>
+```
+Then, you can find the configuration files for your Peers in the directory `/deployWPU/setupWireHole/wireguard/`.
+To access the configuration file for Peer 1, run:
+```console
+sudo cat /deployWPU/setupWireHole/wireguard/peer1/peer1.conf
+```
+To access the configuration file for Peer 2, run:
+```console
+sudo cat /deployWPU/setupWireHole/wireguard/peer2/peer2.conf
+```
+Copy the contents of the file you want and save it in your device with the name `peerX.conf` . (Replace the X with the number of your Peer).
+Then, proceed to the next section depending on the OS of the device you want to connect to the VPN from.
+
+### Windows Client
+Download the Wireguard Client from [here](https://download.wireguard.com/windows-client/wireguard-installer.exe) and install it.
+Then, open the Wireguard Client and click on "Import tunnel(s) from file". Browse to the folder where you saved the configuration file and open the `peerX.conf`.
+And that's it! Now you can activate you tunnel to turn on the VPN.
+
+### Linux Client
+Download and install the Wireguard Client following the instructions [here](https://www.wireguard.com/install/), depending on your Linux Distribution.
+Then, you need to go to the directory where you saved the configuration file `peerX.conf`, open a Terminal in that directory and run:
+```console
+# Install the configuration file in the correct directory
+sudo install -o root -g root -m 600 peerX.conf /etc/wireguard/wg0.conf #Replace the X with the number of your Peer
+
+# Start the WireGuard VPN:
+sudo wg-quick up wg0
+
+# Verify the connection to the VPN:
+sudo wg
+```
+And that's it! The VPN tunnel is now active.
+To stop the VPN, run the command:
+```console
+sudo wg-quick down wg0
+```
+
 ## Configuration
 ### Split-Tunnel (recommended)
 
