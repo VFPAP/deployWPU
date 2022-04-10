@@ -67,7 +67,7 @@ Got to https://www.oracle.com/cloud/sign-in.html and input your Cloud Account Na
 
 Then input your email and password used to create the Oracle Cloud account in the form on the right-hand side (Oracle Cloud Infrastructure)
 
-Now you should be in the Oracle Cloud Console. (The URL should be: console.\<location\>.oraclecloud.com OR should end in: ?tenant=\<Cloud Account Name\>&region=\<location\>)
+Now you should be in the Oracle Cloud Console. (The URL should be: cloud.oracle.com/?region=\<location\>. Eg: https://cloud.oracle.com/?region=uk-london-1)
 
 Now click on the button in the top right corner of the page (Profile) and click on your email. 
 
@@ -100,7 +100,7 @@ Use the value copied from the "Configuration File Preview".
 
 OR
 
-Scroll all the way up in the same page where we left off in the last step of the last section and under User Information the first line is what we want. Click Copy and then save that value somewhere (just paste it in your favourite text editor).
+Scroll all the way up in the same page where we left off in the last step of the last section and under User Information the first line (OCID) is what we want. Click Copy and then save that value somewhere (just paste it in your favourite text editor).
 
 **Tenancy OCID**:
 Use the value copied from the "Configuration File Preview".
@@ -115,7 +115,7 @@ Use the value copied from the "Configuration File Preview".
 
 OR
 
-To get the region identifier, just look at the URL of the page. It should be: console.\<location\>.oraclecloud.com/tenancy or end in: tenancy?region=\<location\>. Your region is in the \<location\> value (Ex: uk-london-1). Copy that value and paste it in the same place where pasted the OCIDs. 
+To get the region identifier, just look at the URL of the page. It should be: cloud.oracle.com/tenancy?region=\<location\>. Your region is in the \<location\> value (Ex: uk-london-1). Copy that value and paste it in the same place where pasted the OCIDs. 
 Alternatively, go to: https://docs.cloud.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm#About__entry__1 and copy the "Region Identifier" for the Home Region you selected when you created your account. Ex: if you chose "UK South (London)" you need to copy the value "uk-london-1".
 
 **Availability Domain**:
@@ -138,7 +138,7 @@ chmod +x terraform
 sudo mv terraform /usr/local/bin/terraform
 ```
 
-Now if close your terminal and open it again and type: 
+Now, close your terminal and open it again and type: 
 ```console
 terraform
 ```
@@ -159,7 +159,7 @@ bash updateRegions.sh
 bash fillVars.sh
 ```
 
-Next you need to go to the place where you stored the values in the [previous section](#Getting-the-OCIDs,-Region-and-Availability-Domain), and the paste the User OCID and hit enter, the Tenancy OCID and hit enter, the Region and hit enter and finally the Availability Domain and hit enter.
+Next you need to go to the place where you stored the values in the [previous section](#getting-the-ocids-region-and-availability-domain), and then paste the User OCID and hit enter, the Tenancy OCID and hit enter, the Region and hit enter and finally the Availability Domain and hit enter.
 
 After that you can check if your terraform.tfvars file looks right. To do so, open a terminal and type:
 ```console
@@ -189,7 +189,7 @@ This will take some time (up to 10min) and after this command executes, you'll s
 ## Configuration
 ### Split-Tunnel (recommended)
 
-If you wish to use the Split-Tunnel mode (refer back to this [section](#Full-Tunnel-vs-Split-Tunnel)), go to the WireGuard client on your device (Ex: your Phone) and change the `AllowedIps` to `10.2.0.0/24, ::/0` to only tunnel the Pi-Hole Web Panel, DNS traffic and all IPv6 traffic to avoid DNS leaks via IPv6.
+If you wish to use the Split-Tunnel mode (refer back to this [section](#full-tunnel-vs-split-tunnel)), go to the WireGuard client on your device (Ex: your Phone) and change the `AllowedIps` to `10.2.0.0/24, ::/0` to only tunnel the Pi-Hole Web Panel, DNS traffic and all IPv6 traffic to avoid DNS leaks via IPv6.
 
 ### Setting a DNS record for PiHole (optional)
 
